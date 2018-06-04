@@ -95,6 +95,26 @@ int Block::globalFirst() const
     return this->globalFirst_;
 }
 
+int Block::borderTop() const
+{
+    return 0;
+}
+
+int Block::borderRight() const
+{
+    return colsNeigh-2;
+}
+
+int Block::borderLeft() const
+{
+    return 0;
+}
+
+int Block::borderBottom() const
+{
+    return colsNeigh*(rowsNeigh-1) - colsNeigh;
+}
+
 void Block::print() const
 {
     std::cout<<"Id " << id_ << " rows " << rows << " cols " <<cols

@@ -20,6 +20,11 @@ public:
     int globalFirst()const;
     int id()const;
 
+    int borderTop()const;
+    int borderRight()const;
+    int borderLeft()const;
+    int borderBottom()const;
+
     void print()const;
 private:
     int id_;
