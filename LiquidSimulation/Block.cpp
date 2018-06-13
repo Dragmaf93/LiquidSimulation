@@ -36,9 +36,9 @@ Block::Block(int id, int nBlocks, int globalRows, int globalCols)
 
     //Compute the first cell in the Cellular Automata
     if(is(Positioning::LEFT))
-        this->globalFirst_ = (this->id_/2) * (rows)*globalCols - globalCols*(id/2?1:0);
+        this->globalFirst_ = ((this->id_/2) * (globalRows / (nBlocks/2))*globalCols) - globalCols*(id_/2?1:0);
     if(is(Positioning::RIGHT))
-        this->globalFirst_ = ((this->id_/2) * (rows)*globalCols) + (globalCols/2 - 1)   - globalCols*(id/2?1:0);
+        this->globalFirst_ = ((this->id_/2) * (globalRows / (nBlocks/2))*globalCols) + (globalCols/2 - 1)   - globalCols*(id_/2?1:0);
 
 
     //Compute the first cell in the Block
@@ -47,6 +47,22 @@ Block::Block(int id, int nBlocks, int globalRows, int globalCols)
         this->first_ = this->first_ + this->colsNeigh;
     if(!is(Positioning::LEFT))
         this->first_++;
+
+}
+
+Block::Block(const Block &block)
+{
+    this->id_ = block.id_;
+    this->nBlocks = block.nBlocks;
+
+    this->cols = block.cols;
+    this->rows = block.rows;
+
+    this->colsNeigh = block.cols;
+    this->rowsNeigh = block.rows;
+
+    this->first_ = block.first_;
+    this->globalFirst_ = block.globalFirst_;
 
 }
 

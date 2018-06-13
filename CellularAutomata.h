@@ -3,7 +3,7 @@
 
 #include<cassert>
 #include<iostream>
-
+#include<QString>
 
 template <class T>
 class CellularAutomata
@@ -46,6 +46,7 @@ public:
     long unsigned getSize()const;
 
     void print()const;
+    QString toString()const;
     long unsigned convert(long unsigned i, long unsigned j)const;
     Cell convert(long unsigned i)const;
 protected:

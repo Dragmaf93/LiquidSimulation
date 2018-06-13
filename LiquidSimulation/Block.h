@@ -7,7 +7,7 @@ public:
     enum Positioning{TOP,RIGHT,BOTTOM,LEFT};
 
     Block(int id, int nBlocks ,int globalRows, int globalCols);
-
+    Block(const Block& block);
     bool is(Positioning positioning)const;
 
     int nRows()const;

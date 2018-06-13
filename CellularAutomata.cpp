@@ -88,15 +88,22 @@ typename CellularAutomata<T>::Cell** CellularAutomata<T>::neighbour(unsigned lon
    Cell** neighbours = new Cell*[4];
    if(i>0 && i<dim1 && j<dim2 && j>=0)
     neighbours[UP] = new Cell(i-1,j);
+   else
+       neighbours[UP] = NULL;
 
    if(i<dim1-1 && i>=0 && j<dim2 && j>=0)
        neighbours[DOWN] = new Cell(i+1,j);
-
+   else
+       neighbours[DOWN] = NULL;
    if(j>0 && j<dim2 && i<dim1 && i>=0)
        neighbours[LEFT] = new Cell(i,j-1);
+   else
+       neighbours[LEFT] = NULL;
 
    if(j<dim2-1 && j>=0 && i<dim1 && i>=0)
        neighbours[RIGHT] = new Cell(i,j+1);
+   else
+       neighbours[RIGHT] = NULL;
 
    return neighbours;
 }
@@ -132,6 +139,19 @@ void CellularAutomata<T>::print()const{
         std::cout<<std::endl;
     }
     std::cout<<std::endl;
+}
+
+template<class T>
+QString CellularAutomata<T>::toString() const
+{
+    QString str="[";
+    for(long unsigned i=0; i < size; i++){
+        str+= QString::number(states[i]);
+        if(i<size-1)
+            str+=",";
+    }
+    str+="]";
+    return str;
 }
 
 template <class T>

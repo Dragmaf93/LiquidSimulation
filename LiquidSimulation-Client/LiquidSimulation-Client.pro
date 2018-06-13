@@ -1,10 +1,18 @@
-QT -= gui
-QT += network websockets
-CONFIG += c++11 console
-CONFIG -= app_bundle
+#-------------------------------------------------
+#
+# Project created by QtCreator 2018-05-26T10:54:25
+#
+#-------------------------------------------------
+
+QT       += core gui network websockets
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+TARGET = Liquid
+TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
-# any feature of Qt which as been marked deprecated (the exact warnings
+# any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
@@ -14,30 +22,32 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+
 SOURCES += \
         main.cpp \
+    LiquidScene.cpp \
     ../CellularAutomata.cpp \
     ../LiquidSimulation.cpp \
-    Block.cpp \
-    CommandLineParser.cpp \
-    TcpServer.cpp
-
-QMAKE_CXX = mpicxx
-QMAKE_CXX_RELEASE = $$QMAKE_CXX
-QMAKE_CXX_DEBUG = $$QMAKE_CXX
-QMAKE_LINK = $$QMAKE_CXX
-QMAKE_CC = mpicc
-
-QMAKE_CFLAGS += $$system(mpicc --showme:compile)
-QMAKE_LFLAGS += $$system(mpicxx --showme:link)
-QMAKE_CXXFLAGS += $$system(mpicxx --showme:compile) -DMPICH_IGNORE_CXX_SEEK
-QMAKE_CXXFLAGS_RELEASE += $$system(mpicxx --showme:compile) -DMPICH_IGNORE_CXX_SEEK
+    CellGrid.cpp \
+    TcpClient.cpp \
+    LiquidSimulatorGUI.cpp \
+    SetParametersForm.cpp \
+    LiquidSceneCreator.cpp
 
 HEADERS += \
+    LiquidScene.h \
     ../CellularAutomata.h \
     ../LiquidSimulation.h \
-    Block.h \
-    CommandLineParser.h \
-    TcpServer.h
+    CellGrid.h \
+    TcpClient.h \
+    LiquidSimulatorGUI.h \
+    SetParametersForm.h \
+    LiquidSceneCreator.h
+
 
 INCLUDEPATH += ../
+
+DISTFILES +=
+
+FORMS += \
+    SetParametersForm.ui

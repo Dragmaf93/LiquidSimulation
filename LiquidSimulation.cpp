@@ -7,15 +7,15 @@ float LiquidSimulation::MaxCompression = 0.25f;
 float LiquidSimulation::MinFlow = 0.005f;
 float LiquidSimulation::MaxFlow = 4.0f;
 float LiquidSimulation::FlowSpeed = 1.0f;
-float LiquidSimulation::AddWater = 3.0f;
-
+float LiquidSimulation::AddWater = 1.0f;
+QList<CellularAutomata<float>::Cell> LiquidSimulation::SourcesWater = QList<CellularAutomata<float>::Cell>();
 
 void LiquidSimulation::initSimulator(CellularAutomata<float> &automata)
 {
     tmpAutomata= new CellularAutomata<float>(automata.getDim1(),automata.getDim2());
     for(unsigned long i = 0;i<tmpAutomata->getDim1();i++)
-            for(unsigned long j = 0;j<tmpAutomata->getDim2();j++)
-                tmpAutomata->state(i,j)=0.0f;
+        for(unsigned long j = 0;j<tmpAutomata->getDim2();j++)
+            tmpAutomata->state(i,j)=0.0f;
 }
 
 
@@ -28,29 +28,31 @@ float ComputeVerticalFlowValue(float remainingLiquid, float destinationLiquid){
     else if (sum < 2* LiquidSimulation::MaxValue + LiquidSimulation::MaxCompression)
         value = (LiquidSimulation::MaxValue*LiquidSimulation::MaxValue +sum*LiquidSimulation::MaxCompression) / (LiquidSimulation::MaxValue+LiquidSimulation::MaxCompression);
     else
-         value = (sum + LiquidSimulation::MaxCompression)/2.0f;
+        value = (sum + LiquidSimulation::MaxCompression)/2.0f;
     return value;
 }
 
 void LiquidSimulation::transitionFunction(CellularAutomata<float> &automata, unsigned long i, unsigned long j)
 {
     float valueCell = automata.state(i,j);
-    CellularAutomata<float>::Cell ** neighbours = automata.neighbour(i,j);
 
     CellularAutomata<float>& diff = *tmpAutomata;
 
-    if(valueCell == SOLID)
+    if(valueCell == SOLID){
         return;
+    }
 
-    if(valueCell == 0)
+    if(valueCell == 0){
         return;
-
-     //add if settled return?
+    }
+    //add if settled return?
 
     if(valueCell<MinValue){
         automata.state(i,j)=0;
         return;
     }
+
+    CellularAutomata<float>::Cell ** neighbours = automata.neighbour(i,j);
 
     float startValue = valueCell,remainingValue = valueCell;
     float flow=0;
@@ -80,6 +82,12 @@ void LiquidSimulation::transitionFunction(CellularAutomata<float> &automata, uns
 
     if(remainingValue < MinValue){
         diff.state(i,j)-=remainingValue;
+
+        for(int i=0; i < 4;i++)
+            if(neighbours[i] != NULL)
+                delete neighbours[i];
+        delete neighbours;
+
         return;
     }
 
@@ -104,6 +112,12 @@ void LiquidSimulation::transitionFunction(CellularAutomata<float> &automata, uns
 
     if(remainingValue < MinValue){
         diff.state(i,j)-=remainingValue;
+
+        for(int i=0; i < 4;i++)
+            if(neighbours[i] != NULL)
+                delete neighbours[i];
+        delete neighbours;
+
         return;
     }
 
@@ -129,8 +143,15 @@ void LiquidSimulation::transitionFunction(CellularAutomata<float> &automata, uns
 
     if(remainingValue < MinValue){
         diff.state(i,j)-=remainingValue;
+
+        for(int i=0; i < 4;i++)
+            if(neighbours[i] != NULL)
+                delete neighbours[i];
+        delete neighbours;
+
         return;
     }
+
     CellularAutomata<float>::Cell& up = *(neighbours[CellularAutomata<float>::UP]);
     if(neighbours[CellularAutomata<float>::UP] != NULL  && automata.state(up) != SOLID){
 
@@ -152,8 +173,13 @@ void LiquidSimulation::transitionFunction(CellularAutomata<float> &automata, uns
 
     if(remainingValue < MinValue){
         diff.state(i,j)-=remainingValue;
-        return;
+
     }
+
+    for(int i=0; i < 4;i++)
+        if(neighbours[i] != NULL)
+            delete neighbours[i];
+    delete neighbours;
 }
 
 void LiquidSimulation::applyTransitionFunctionToAutomata(CellularAutomata<float> &automata)
